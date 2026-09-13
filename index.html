@@ -32,12 +32,13 @@
     <script src="_framework/blazor.webassembly.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>
     <script>
+        // สั่งให้บราวเซอร์เตรียมโหลดเสียงทั้งหมดรอไว้ก่อน
         window.speechSynthesis.getVoices();
 
         window.playAudio = (text) => {
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'en-US';
-            utterance.rate = 0.9; // ปรับความเร็วให้เด็กฟังง่ายขึ้น
+            utterance.rate = 0.85; // ปรับความเร็วให้เด็กฟังง่ายขึ้น
 
             // ดึงรายการเสียงทั้งหมดที่มีในเครื่อง
             const voices = window.speechSynthesis.getVoices();
