@@ -32,10 +32,30 @@
     <script src="_framework/blazor.webassembly.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>
     <script>
+        window.speechSynthesis.getVoices();
+
         window.playAudio = (text) => {
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'en-US';
-            utterance.rate = 0.9;
+            utterance.rate = 0.9; // ปรับความเร็วให้เด็กฟังง่ายขึ้น
+
+            // ดึงรายการเสียงทั้งหมดที่มีในเครื่อง
+            const voices = window.speechSynthesis.getVoices();
+
+            if (voices.length > 0) {
+                // พยายามค้นหาเสียงที่คุณภาพดีที่สุด เรียงตามลำดับความสำคัญ
+                const bestVoice =
+                    voices.find(v => v.name.includes('Samantha')) ||
+                    voices.find(v => v.name.includes('Alex')) ||
+                    voices.find(v => v.name.includes('Google US English')) ||
+                    voices.find(v => v.lang === 'en-US' && v.name.includes('Premium')) ||
+                    voices.find(v => v.lang === 'en-US'); // ถ้าหาไม่เจอเลย เอาเสียงอังกฤษมาตรฐาน
+
+                if (bestVoice) {
+                    utterance.voice = bestVoice;
+                }
+            }
+
             window.speechSynthesis.speak(utterance);
         };
 
